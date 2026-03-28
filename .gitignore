@@ -1,0 +1,7 @@
+/external-references/*
+!/external-references/AGENTS.md
+!/external-references/CLAUDE.md
+
+# macOS metadata.
+.DS_Store
+._*

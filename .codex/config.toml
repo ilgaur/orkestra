@@ -1,0 +1,19 @@
+# Codex MCP — project scope (trusted repo).
+# CLI and IDE extension read this file when run from this directory.
+# Chrome DevTools: same flags as `.cursor/mcp.json` and `.mcp.json`.
+# Figma: remote server; run `codex mcp login figma` (or follow Codex auth prompts) after install.
+# Docs: https://developers.openai.com/codex/mcp
+# Figma setup: https://developers.figma.com/docs/figma-mcp-server/remote-server-installation/
+
+[mcp_servers.chrome-devtools]
+command = "npx"
+args = [
+  "-y",
+  "chrome-devtools-mcp@latest",
+  "--channel=beta",
+  "--isolated",
+  "--no-usage-statistics",
+]
+
+[mcp_servers.figma]
+url = "https://mcp.figma.com/mcp"

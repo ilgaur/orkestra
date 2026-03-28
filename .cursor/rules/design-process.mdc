@@ -1,0 +1,28 @@
+---
+description: Orkestra design–product–code discipline. Apply when working on product specs, Figma registry (product/figma.md), discovery, design-system docs, agentic-design workflow, or when the user mentions Figma, tokens, design system, or product positioning.
+globs:
+  - "product/**/*.md"
+  - "docs/design-system.md"
+  - "docs/figma-mcp.md"
+  - "docs/agentic-design.md"
+  - "docs/SKILLS.md"
+  - "docs/workflow.md"
+alwaysApply: false
+---
+
+# Design & product process
+
+- Canonical loop: `docs/agentic-design.md`. Anti-stale matrix lives there — run it before closing work.
+- Token and naming rules: `docs/design-system.md`. Process and enforcement: `docs/workflow.md`.
+- Figma MCP tool matrix: `docs/figma-mcp.md`. Register every production file in `product/figma.md`.
+- Socratic product shaping: `product/discovery.md` + skill **product-discovery** (`.agents/skills/product-discovery/SKILL.md`).
+- Figma writes: skill **figma-orchestration**; always load **figma-use** before `use_figma`.
+- Implement from design: skill **figma-to-liveview** + `docs/frontend.md` (LiveView, not React).
+- Visual taste: **frontend-design** skill. Cohesive and crafted — not generic SaaS clutter.
+
+Do not ship UI that bypasses tokens. **Production:** Figma or ADR required for new `ui/` primitives; **exploration:** allowed with logged design debt per `docs/agentic-design.md`. User explicit override wins — record the tradeoff.
+
+If `components/ui/` grows crowded, proactively suggest splits per `docs/frontend.md`.
+
+When Chrome DevTools MCP is available and the user is closing production-strict UI work,
+suggest a browser pass per `docs/chrome-devtools-mcp.md` and skill **browser-verification**.
