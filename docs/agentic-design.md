@@ -11,10 +11,12 @@
 ## The loop (repeat every feature)
 
 ```
+0. Visual identity   → brand adjectives, palette, type, spatial decisions
+                        (docs/workflow.md Phase 0; skip if tokens already exist)
 1. Product clarity   → product/discovery.md, product/README.md, maybe new spec
 2. Figma intent      → tokens + components + frames (product/figma.md updated)
 3. Spec acceptance   → product/specs/<feature>.md (draft → building)
-4. Implementation  → contexts → LiveView → tests (docs/frontend.md, docs/backend.md)
+4. Implementation    → contexts → LiveView → tests (docs/frontend.md, docs/backend.md)
 5. Parity check      → Figma vs browser; tokens vs code; **Chrome DevTools MCP** on key routes when MCP is configured (`docs/chrome-devtools-mcp.md`)
 6. Doc sync          → close the loop (matrix below)
 ```
@@ -68,11 +70,11 @@ build only **non-committing** UI (layout shells, tokenized placeholders).
 
 ## Red lines (agent enforces)
 
-- No raw hex or arbitrary pixel classes in components — tokens only.
+- Token-only styling per `docs/design-system.md` — no raw hex, no arbitrary pixel classes.
 - **Production phase:** no new public `ui/` component without Figma variable alignment
   **or** an explicit ADR. **Exploration phase:** allowed with a “Design debt” note in
   `product/discovery.md` naming what to sync later.
-- No marketing copy on operational surfaces (see `frontend-design` skill).
+- No marketing copy on operational surfaces (per `frontend-design` skill).
 - No closing a task with **stale** `product/figma.md`, `product/discovery.md`, or spec status.
 
 ---
@@ -81,6 +83,7 @@ build only **non-committing** UI (layout shells, tokenized placeholders).
 
 | If you changed… | You must update… |
 |---|---|
+| Visual identity (palette, type, radius, spatial) | `product/discovery.md` brand adjectives + Figma variables + `docs/design-system.md` |
 | Figma structure or new file | `product/figma.md` |
 | Token semantics | `docs/design-system.md` note + Figma variables + (when app exists) CSS/Tailwind |
 | User-visible behavior | `product/specs/*` status + acceptance examples |
@@ -97,6 +100,7 @@ instead of letting two sources drift.
 
 | Phase | Skill(s) |
 |---|---|
+| Visual identity (Phase 0) | **product-discovery** + **figma-orchestration** (+ `docs/workflow.md` Phase 0) |
 | Product shaping | **product-discovery** |
 | Figma authoring | **figma-orchestration** (+ upstream **figma-use** before `use_figma`) |
 | Visual taste | **frontend-design** |

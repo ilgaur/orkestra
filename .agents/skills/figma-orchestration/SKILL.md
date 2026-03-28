@@ -22,6 +22,27 @@ description: Use when creating, editing, or organizing Figma files via MCP (use_
 - Call `whoami` if `planKey` is unknown.
 - `create_new_file` → append row to `product/figma.md` with `file_key` and URL.
 
+## Creating variable collections from brand decisions
+
+When the Figma **Tokens** page is empty and no variable collections exist, follow
+`docs/workflow.md` § Phase 0 to bootstrap. The short version:
+
+1. Confirm **brand adjectives** exist in `product/discovery.md`. If not, run the
+   product-discovery socratic checklist first — do not guess a palette.
+2. Create a **Primitives** collection (color scales in HSL, spacing base, radii).
+   Use `docs/design-system.md` for naming rules.
+3. Create a **Semantic** collection that aliases primitives (`primary`,
+   `foreground`, `background`, `muted`, `destructive`, `status-*`).
+4. Optionally set up modes (light/dark) as collection modes.
+5. Use `get_variable_defs` to verify collections after creation.
+6. Populate the **Tokens** page with a visual reference frame showing all
+   variables (color swatches, spacing scale).
+7. Mirror to `assets/css/app.css` + `tailwind.config.js` per
+   `docs/design-system.md` § "When tokens change."
+
+Each step is a separate `use_figma` call (load **figma-use** first). Validate
+with `get_metadata` / `get_screenshot` between steps.
+
 ## Systematic layout
 
 - Auto layout for responsive intent; meaningful layer names; annotations for interaction.

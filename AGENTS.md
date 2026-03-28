@@ -37,17 +37,44 @@ are fixed; do not duplicate instructions into parallel files.
 ### Skills
 
 - **Canonical tree:** `.agents/skills/<name>/SKILL.md`.
-- **`.claude/skills` and `.codex/skills`** are symlinks to `.agents/skills`. Add or
-  change skills only under `.agents/skills/`.
+- **`.cursor/skills`, `.claude/skills`, and `.codex/skills`** are all symlinks to
+  `.agents/skills`. Add or change skills only under `.agents/skills/`.
+- All three agents discover skills from `.agents/skills/` natively (Cursor also
+  reads `.cursor/skills/`; Claude Code reads `.claude/skills/`; Codex scans
+  `.agents/skills/` from CWD up to repo root). The symlinks ensure every path
+  resolves to the same canonical files.
 
 ### MCP
 
-- Each client loads **its own** MCP configuration. This repo checks in **`.cursor/mcp.json`**
-  (Cursor — Chrome DevTools), **`.mcp.json`** (Claude Code project — Chrome DevTools),
-  and **`.codex/config.toml`** (Codex — Chrome DevTools + Figma URL). Cursor and Claude
-  typically add **Figma** via each tool’s official plugin or a manual HTTP entry; see
-  `docs/install/mcp-clients.md`. OAuth for Figma needs a one-time authenticate per
-  machine in each client.
+- Each client loads **its own** MCP configuration (format differs per tool).
+  All three configs are checked in and kept **semantically equivalent**:
+  - **Cursor:** `.cursor/mcp.json` — Chrome DevTools (stdio). Figma via the
+    official Figma plugin (`.cursor/settings.json`).
+  - **Claude Code:** `.mcp.json` — Chrome DevTools (stdio) + Figma (HTTP remote).
+  - **Codex:** `.codex/config.toml` — Chrome DevTools (stdio) + Figma (HTTP remote).
+- **Figma** requires a one-time OAuth authenticate per machine in each client.
+  See `docs/install/mcp-clients.md` for per-client setup commands.
+
+### Cursor Rules
+
+- `.cursor/rules/*.mdc` files are **Cursor-only** auto-trigger rules (glob-activated).
+  They are thin pointers that reference canonical skills or docs — never duplicate
+  the content. Claude Code and Codex do not have an equivalent feature; they rely
+  on `AGENTS.md` and skills for the same coverage.
+
+### Hooks (quality gates)
+
+- **Shared scripts** live in `.quality/scripts/` (committed, not agent-specific).
+  `check-all.sh` runs the full gate (`mix format`, Credo, Sobelow) at the end of
+  an agent turn. `check-file.sh` runs lightweight per-file checks after edits.
+- **Per-agent wiring** (format differs per tool, semantically equivalent):
+  - **Cursor:** `.cursor/hooks.json` — `afterFileEdit` + `stop`.
+  - **Claude Code:** `.claude/settings.json` — `PostToolUse` (Edit|Write) + `Stop`.
+  - **Codex:** `.codex/hooks.json` — `PostToolUse` (Write) + `Stop`.
+    Requires `codex_hooks = true` in `.codex/config.toml` (experimental).
+- Scripts are **inert** until `mix.exs` exists (they exit 0 immediately if no
+  Elixir project is detected).
+- When changing hooks, update all three agent configs in the same change.
 
 ---
 
@@ -72,6 +99,19 @@ are fixed; do not duplicate instructions into parallel files.
 ## Context Router
 
 **Overwhelmed?** Start with [`docs/day-one.md`](docs/day-one.md) — minimal read list per task.
+
+**Doc ownership (one canonical source per topic):**
+
+- **Token theory, naming, Figma variables:** `docs/design-system.md`
+- **Component architecture, layers, LiveView patterns:** `docs/frontend.md`
+- **Design-to-code process, enforcement checklists, Phase 0 bootstrapping:** `docs/workflow.md`
+- **MCP tool matrix, file hygiene, Figma pipeline:** `docs/figma-mcp.md`
+- **The loop, strictness phases, anti-stale matrix:** `docs/agentic-design.md`
+- **Browser verification, Chrome DevTools MCP:** `docs/chrome-devtools-mcp.md`
+- **Visual taste, composition, motion, copy:** `.agents/skills/frontend-design/SKILL.md`
+
+When two docs say the same thing, the owner above is correct and the other
+copy is a bug to fix.
 
 | Working on... | Read these |
 |---|---|
@@ -99,14 +139,24 @@ are fixed; do not duplicate instructions into parallel files.
 | Figma MCP writes and file setup | `.agents/skills/figma-orchestration/SKILL.md` |
 | Implement Figma → LiveView | `.agents/skills/figma-to-liveview/SKILL.md` |
 | Socratic product / business shaping | `.agents/skills/product-discovery/SKILL.md` |
+| Browser verification after UI changes | `.agents/skills/browser-verification/SKILL.md` |
+| MCP client installation (Cursor, Claude Code, Codex) | `docs/install/mcp-clients.md` |
 | Local inspiration material | `external-references/AGENTS.md` |
 
-**Load ONLY what's relevant** for focused implementation tasks. Don't load all
-docs at once for a simple bug fix or feature.
+**Routing discipline (agents enforce this):**
 
-**BUT: for product, ideation, or cross-cutting conversations** — when the user is
-shaping what the product is, discussing architecture, or working across multiple
-areas — **read ALL of the following before responding:**
+1. For a focused task, load **at most** the root `AGENTS.md` + one area doc + one skill.
+   Use the table above or `docs/day-one.md` to pick the right path.
+2. Do NOT pre-load docs "just in case." If you discover mid-task that another
+   doc is needed, load it then — not at session start.
+3. If two loaded docs say the same thing, the more specific doc wins and the
+   general doc's copy is a bug. Flag it.
+4. The full-context rule (read all 7 docs below) applies ONLY to product/ideation/
+   cross-cutting conversations — never to focused implementation.
+
+**Full-context rule — for product, ideation, or cross-cutting conversations** — when
+the user is shaping what the product is, discussing architecture, or working across
+multiple areas — **read ALL of the following before responding:**
 
 1. `product/discovery.md` + `product/README.md` (what the product is and isn't)
 2. `docs/architecture.md` (system shape)
@@ -147,3 +197,9 @@ affected docs before closing the work.
 - **The user is learning Elixir.** Explain concepts when they first appear. Teach through the work.
 - **Claude Code entry is `CLAUDE.md`.** It mirrors `AGENTS.md` via symlink at each layer;
   keep them in sync by editing `AGENTS.md` only.
+- **Agent configs stay equivalent.** When adding an MCP server, skill, or rule
+  to one agent, add the equivalent for all three (Cursor, Claude Code, Codex)
+  in the same change. See Multi-client agents section.
+- **Quality hooks run automatically.** `mix format`, Credo, and Sobelow run via
+  hooks at the end of each agent turn. Fix reported issues before declaring work
+  complete. See `.quality/scripts/` for the shared gate scripts.

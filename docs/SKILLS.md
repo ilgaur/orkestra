@@ -1,12 +1,12 @@
 # Agent Skills — When to Use What
 
 > Repo-local skills live in `.agents/skills/<name>/SKILL.md`. **Cursor**, **Claude Code**,
-> and **Codex** all resolve the same tree: `.claude/skills` and `.codex/skills` are
-> symlinks to `.agents/skills` (see `AGENTS.md` — Multi-client agents). Edit skills only
-> under `.agents/skills/`.
+> and **Codex** all resolve the same tree: `.cursor/skills`, `.claude/skills`, and
+> `.codex/skills` are symlinks to `.agents/skills` (see `AGENTS.md` — Multi-client
+> agents). Edit skills only under `.agents/skills/`.
 >
-> Cursor also uses `.cursor/rules/*.mdc` for globs and auto-attached guidance; that is
-> complementary to skills, not a second skill store.
+> Cursor also uses `.cursor/rules/*.mdc` for globs and auto-attached guidance; those are
+> thin pointers to skills or docs, not a second content store.
 >
 > Curated skills from [openai/skills](https://github.com/openai/skills/tree/main/skills/.curated)
 > can be installed with Codex `$skill-installer <name>` when you want the **upstream**
@@ -19,7 +19,7 @@
 
 | Client | Instructions | Skills |
 |--------|----------------|--------|
-| **Cursor** | Root `AGENTS.md`, `docs/AGENTS.md`, etc.; optional `CLAUDE.md` symlink for parity | `.agents/skills/`, `.cursor/skills/` if present, plus `.claude/skills` / `.codex/skills` symlinks ([Cursor skills](https://cursor.com/docs/context/skills)) |
+| **Cursor** | Root `AGENTS.md`, `docs/AGENTS.md`, etc.; `CLAUDE.md` symlink for parity | `.agents/skills/` + `.cursor/skills` symlink ([Cursor skills](https://cursor.com/docs/context/skills)) |
 | **Claude Code** | **`CLAUDE.md` → `AGENTS.md`** per directory (symlink); edit `AGENTS.md` only | `.claude/skills` → `.agents/skills` |
 | **Codex** | Same markdown as Cursor; reads repo `.agents/skills` from the git root ([Codex skills](https://developers.openai.com/codex/skills/)) | `.codex/skills` → `.agents/skills`; user-level `~/.codex/skills` for extras (e.g. `$skill-installer figma-use`) |
 
@@ -32,6 +32,9 @@ tools has access.
 ## Decision tree (load one path, not all)
 
 ```
+Are you creating a design system from scratch (no tokens, no components)?
+  → docs/workflow.md Phase 0 + figma-orchestration + product-discovery
+
 Are you changing product meaning, pricing, or positioning?
   → product-discovery + product/discovery.md + product/README.md
 

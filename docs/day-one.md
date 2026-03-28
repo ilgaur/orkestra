@@ -15,7 +15,7 @@
 | **Implement from a Figma link** | Above + `docs/figma-mcp.md` + `product/figma.md` + skill `figma-to-liveview` |
 | **Verify UI in real Chrome** (MCP installed) | `docs/chrome-devtools-mcp.md` + skill `browser-verification` — run `mix phx.server` first |
 | **Change what the product means** | `product/discovery.md` + `product/README.md` + skill `product-discovery` |
-| **Ideate, brainstorm, or shape the product** | **Read ALL docs** — see the full-context rule in `AGENTS.md` context router. Do not respond until you have read product/, design system, architecture, frontend, workflow, agentic-design, and both design-related skills. |
+| **Ideate, brainstorm, or shape the product** | Follow the **full-context rule** in `AGENTS.md` — 7 specific items: `product/discovery.md` + `product/README.md`, `docs/architecture.md`, `docs/design-system.md` + `docs/workflow.md`, `docs/frontend.md`, `docs/agentic-design.md`, skills `frontend-design` + `product-discovery`. Do not respond until all 7 are read. |
 | **Draw or edit Figma via MCP** | `docs/figma-mcp.md` + `product/figma.md` + skill `figma-orchestration` (+ figma-use before writes) |
 | **Full vertical slice** (product + design + code) | `docs/agentic-design.md` (the loop is short) then pull area docs as you touch each layer |
 | **Learn from external code / OSS** | `external-references/AGENTS.md` — clone or copy repos locally under that tree; summarize patterns; reconcile with `AGENTS.md` principle 8 before reuse |

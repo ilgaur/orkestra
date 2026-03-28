@@ -31,6 +31,16 @@ the alias, not every component.
 
 ---
 
+## Bootstrapping from scratch
+
+When no tokens exist yet — no Figma variable collections, no CSS custom properties,
+no `tailwind.config.js` theme — follow **`docs/workflow.md` § Phase 0: Visual Identity**
+before anything in this document applies. Phase 0 turns mood board references and brand
+adjectives into the first Primitives and Semantic collections in Figma, then mirrors them
+to code. This document takes over once those foundations exist.
+
+---
+
 ## Figma variables and styles
 
 - **Variables** — single values (color, number, string). Use for spacing scale, radii,

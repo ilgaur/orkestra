@@ -14,11 +14,11 @@ keep Figma and other servers registered in each tool you use.
 
 ## Cursor (this repo)
 
-Project file: **`.cursor/mcp.json`** — currently **Chrome DevTools** only (stdio).
+Project file: **`.cursor/mcp.json`** — Chrome DevTools (stdio).
 
-**Figma:** Prefer the official Figma plugin (`/add-plugin figma` in agent chat) so MCP +
-skills bundle together; see [Figma remote MCP — Cursor](https://developers.figma.com/docs/figma-mcp-server/remote-server-installation/).
-You can also merge a `figma` entry into `mcpServers` if you configure manually.
+**Figma:** The official Figma plugin is enabled in `.cursor/settings.json`
+(`plugins.figma.enabled: true`). This bundles MCP + agent skills together.
+See [Figma remote MCP — Cursor](https://developers.figma.com/docs/figma-mcp-server/remote-server-installation/).
 
 Chrome DevTools uses `--channel=beta` + `--isolated` (do not set `executable-path` with
 `channel`; they conflict).
@@ -85,26 +85,23 @@ file changes.
 Official stdio syntax: [Claude Code MCP](https://docs.claude.com/en/docs/claude-code/mcp)
 (`claude mcp add [options] <name> -- <command> [args...]`; default transport is stdio).
 
-**This repo:** Chrome DevTools MCP is registered at **project** scope in **`.mcp.json`**
-(check in, same spirit as `.cursor/mcp.json`). Recreate with:
+**This repo:** Chrome DevTools and Figma MCP are both registered at **project** scope
+in **`.mcp.json`** (checked in). Recreate with:
 
 ```bash
 cd /path/to/orkestra
 claude mcp add --scope project chrome-devtools -- npx -y chrome-devtools-mcp@latest --channel=beta --isolated --no-usage-statistics
+claude mcp add --scope project --transport http figma https://mcp.figma.com/mcp
 ```
 
 Use `--scope user` instead if you want the same server across all projects (stored in
 `~/.claude.json`). First use of project-scoped servers may prompt for approval; see
 `claude mcp reset-project-choices` if you need to reset that.
 
-**Figma:** Not in committed `.mcp.json` yet; use the [Figma plugin](https://developers.figma.com/docs/figma-mcp-server/remote-server-installation/)
-(`claude plugin install figma@claude-plugins-official`) or:
-
-```bash
-claude mcp add --scope project --transport http figma https://mcp.figma.com/mcp
-```
-
-Then `/mcp` → Authenticate for Figma.
+**Figma:** The Figma remote server is committed in `.mcp.json`. On first use, run
+`/mcp` → Authenticate for Figma. You can also install the Figma plugin for bundled
+skills: `claude plugin install figma@claude-plugins-official`
+([docs](https://developers.figma.com/docs/figma-mcp-server/remote-server-installation/)).
 
 ---
 

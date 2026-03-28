@@ -22,8 +22,8 @@ This is a Phoenix LiveView application. All frontend guidance must respect:
 - **LiveView.JS** (`Phoenix.LiveView.JS`) for client micro-interactions (show/hide, transitions, class toggles).
 - **Colocated hooks** (LiveView 1.1) for third-party JS libraries (charts, terminals, maps).
 - **No React, no Framer Motion.** Motion is CSS transitions + LiveView.JS + occasional hook-based animation.
-- Component layers: `ui/` (primitives) → `domain/` (composed) → `interactive/` (stateful with hooks).
-- All colors, spacing, and typography use token classes from `tailwind.config.js`. No raw values.
+- Component layers per `docs/frontend.md`: `ui/` (primitives) → `domain/` (composed) → `interactive/` (stateful with hooks).
+- All colors, spacing, and typography use token classes per `docs/design-system.md`. No raw values.
 
 See `docs/frontend.md` (components — includes **Growing the component tree**),
 `docs/design-system.md` (tokens), `docs/workflow.md` (process), `docs/figma-mcp.md` (MCP),
@@ -186,7 +186,7 @@ Motion rules:
 - No filler copy.
 - No more than two typefaces without a clear reason.
 - No more than one accent color unless the design system requires it.
-- No raw color values — every color comes from the design token system.
+- Token-only styling per `docs/design-system.md` — no raw color values.
 - No custom CSS — Tailwind utilities only.
 - Ensure every page works on both desktop and mobile.
 

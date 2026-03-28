@@ -9,71 +9,83 @@
 
 ---
 
+## Phase 0: Visual Identity (before tokens exist)
+
+> Skip this section when tokens and Figma variables already exist.
+> This is the bridge from **unstructured inspiration** to **concrete design foundations**.
+> Canonical token theory lives in `docs/design-system.md`; this section covers only the
+> bootstrapping **process**.
+
+### The sequence
+
+1. **Collect references** — mood boards, screenshots, competitor UI, typography
+   samples, color palettes. Store them on the Figma **Mood and direction** page.
+   Agent can read these via `get_screenshot` on the mood page nodes.
+2. **Extract brand adjectives** — distill references into **three** adjectives that
+   drive every visual decision. Record in `product/discovery.md` § Brand adjectives.
+   Example: _sleek, sexy, fun_.
+3. **Derive palette** — from references + adjectives, propose a primitive color
+   scale (neutrals, primary hue, accent, status colors). Create a **Primitives**
+   variable collection in Figma with HSL values. Then create a **Semantic**
+   collection that aliases primitives (`primary`, `foreground`, `background`,
+   `muted`, `destructive`, `status-*`). Follow naming rules in
+   `docs/design-system.md`.
+4. **Choose typefaces** — one sans-serif for UI, one monospace for technical
+   values. Load in Figma and define text styles. Record the pair in
+   `docs/design-system.md` § Typography.
+5. **Set spatial decisions** — border radius (sharp/boxy → small radii; soft →
+   large radii), spacing base (default 8 px), elevation philosophy (flat vs
+   layered). Create Figma number variables for `radius`, `spacing-*`. Record
+   rationale in `docs/design-system.md`.
+6. **Create Figma variables** — populate the **Tokens** page with a visual
+   reference of all collections and modes (light/dark if applicable). Use
+   `use_figma` via the **figma-orchestration** skill (load **figma-use** first).
+7. **Mirror to code** — define CSS custom properties in `assets/css/app.css`
+   and map them in `tailwind.config.js`. Follow sync rules in
+   `docs/design-system.md` § "When tokens change."
+
+After Phase 0 completes, the three layers below take over.
+
+### When the user shares reference images
+
+When a user provides screenshots, Figma links, or mood board references:
+
+1. **Read the mood board** — use `get_screenshot` on the Figma mood page or
+   view the provided images directly.
+2. **Cross-reference with brand adjectives** in `product/discovery.md`. If no
+   adjectives exist yet, run the product-discovery socratic checklist first.
+3. **Propose concrete decisions** — suggest palette, typeface, radius, and
+   spacing that match the references AND the adjectives. Present 2–3 options
+   with tradeoffs.
+4. **Wait for approval** before creating Figma variables or Tailwind tokens.
+   Never silently derive a full palette from a screenshot.
+5. **Execute** — follow steps 3–7 of the sequence above.
+
+### Agent enforcement (Phase 0)
+
+- Do **not** create Figma variable collections without brand adjectives in
+  `product/discovery.md`. If missing, ask first.
+- Do **not** pick typefaces, palette, or radius without proposing alternatives.
+- Do **not** skip the Figma Tokens page — variables must exist in Figma before
+  `tailwind.config.js`.
+- Log every Phase 0 decision in `product/discovery.md` § Decisions log.
+
+---
+
 ## Design System — Three Layers, Built in Order
 
 ### Layer 1: Design Tokens
 
-Tokens are named values that define the visual language. They exist in two
-synchronized places: **Figma Variables** and **tailwind.config.js**. When one
-changes, the other must update.
+Token theory (two-tier model, naming conventions, Figma variable collections,
+CSS custom properties) lives in **`docs/design-system.md`** — that is the
+canonical source. This section covers only the **process** of working with tokens.
 
-**Token categories (build in this order):**
+Tokens exist in two synchronized places: **Figma Variables** and
+**tailwind.config.js**. When one changes, the other must update. Follow the
+sync process in `docs/design-system.md` § "When tokens change."
 
-1. **Primitive tokens** — raw values, no semantic meaning:
-   - Colors: `blue-500: #3B82F6`, `gray-900: #111827`
-   - Spacing: `1: 4px`, `2: 8px`, `4: 16px`, `8: 32px`
-   - Font sizes: `xs: 12px`, `sm: 14px`, `base: 16px`, `lg: 18px`
-   - Border radius, shadows, line heights, font weights
-
-2. **Semantic tokens** — tokens with meaning, referencing primitives:
-   - `primary: blue-600`, `destructive: red-600`, `muted: gray-100`
-   - `foreground: gray-900`, `muted-foreground: gray-500`
-   - `status-running: green-500`, `status-failed: red-500`
-   - These change between themes (light/dark). Primitives do not.
-
-3. **Component tokens** (optional, add when needed):
-   - `button-primary-bg: primary`, `button-primary-text: primary-foreground`
-   - Only create when enough components justify the indirection.
-
-**In Figma:** tokens are Variables organized into collections (Primitives, Semantic).
-
-**In code:** tokens live in `assets/css/app.css` (CSS custom properties) and
-`assets/tailwind.config.js` (maps Tailwind classes to those properties).
-
-```css
-/* assets/css/app.css */
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222 47% 11%;
-    --primary: 221 83% 53%;
-    --primary-foreground: 210 40% 98%;
-    --destructive: 0 84% 60%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%;
-    --border: 214 32% 91%;
-    --ring: 221 83% 53%;
-    --radius: 0.5rem;
-    --status-running: 142 71% 45%;
-    --status-pending: 38 92% 50%;
-    --status-failed: 0 84% 60%;
-    --status-stopped: 215 16% 47%;
-  }
-
-  .dark {
-    --background: 222 47% 11%;
-    --foreground: 210 40% 98%;
-    /* ... dark mode overrides ... */
-  }
-}
-```
-
-### Token rules
-
-- Never use a raw color value in a component. Always use a token name.
-- Never create a component before its tokens exist.
-- Name tokens by purpose, not appearance: `destructive` not `red`, `primary` not `blue`.
-- When adding a token in code, note that Figma needs the same token (and vice versa).
+**Build order:** primitives → semantic → component (optional). Never create a
+component before its tokens exist.
 
 ### Layer 2: Components
 
@@ -103,11 +115,8 @@ Don't pre-design patterns. Build pages, notice repetition, extract the pattern.
 
 The Figma MCP server connects the canvas to the agent for **read** (design context,
 screenshots, variables) and **write** (`use_figma` with the figma-use skill). Canonical
-tool matrix, layer hygiene, and parity rules live in **`docs/figma-mcp.md`**. Every
-production file must appear in **`product/figma.md`**.
-
-**Code Connect:** map Figma components to Phoenix function components so MCP returns
-your real `attr` / variant names. Add mappings incrementally.
+tool matrix, layer hygiene, Code Connect, and parity rules live in
+**`docs/figma-mcp.md`**. Every production file must appear in **`product/figma.md`**.
 
 ---
 
@@ -126,9 +135,9 @@ Tell the agent: "Implement this design" or "Build this as a function component."
 
 ### 3. Agent reads design context via MCP
 
-Combined with `frontend.md` rules, the agent generates: function components,
-LiveView pages composing existing components, Tailwind classes using token names,
-proper `attr`/`slot` declarations.
+See `docs/figma-mcp.md` for the tool pipeline. Combined with `docs/frontend.md`
+rules, the agent generates function components, LiveView pages, and proper
+`attr`/`slot` declarations — all using semantic token classes.
 
 ### 4. Review
 
@@ -174,7 +183,7 @@ system grows from real usage, not speculation.
 
 ### The agent must REFUSE to:
 
-- Use a raw color value when a token exists.
+- Bypass token-only styling (per `docs/design-system.md`).
 - Duplicate an existing component.
 - Skip `attr`/`slot` declarations on function components.
 

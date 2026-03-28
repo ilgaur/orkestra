@@ -26,6 +26,20 @@ holds the same design bar as Konsole — no ugly admin panels.
 
 ---
 
+## Brand
+
+Three adjectives drive all visual and interaction decisions across both products:
+
+1. **Sleek** — clean lines, confident hierarchy, no clutter.
+2. **Sexy** — premium feel, surprising details, not boring.
+3. **Fun** — playful interactions, the OS metaphor, inviting for beginners.
+
+These translate to token choices (palette, radius, elevation), motion philosophy
+(restrained but present), and the `frontend-design` skill's visual thesis. See
+`product/discovery.md` § Brand adjectives for history.
+
+---
+
 ## Glossary
 
 Use these terms consistently in code, UI, specs, and conversation.

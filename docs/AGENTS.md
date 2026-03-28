@@ -34,7 +34,8 @@ Follow this sequence for every task:
    directory that introduces agent rules, add `AGENTS.md` and the matching
    `CLAUDE.md` → `AGENTS.md` symlink in the same change.
 9. **Skills live only under `.agents/skills/`.** Do not create a second copy under
-   `.claude/skills` or `.codex/skills` — those paths symlink to `.agents/skills/`.
+   `.cursor/skills`, `.claude/skills`, or `.codex/skills` — those paths all symlink
+   to `.agents/skills/`.
 
 ### Design, Figma, and product sync
 
@@ -185,6 +186,29 @@ feat(accounts)!: replace session auth with magic link tokens
 BREAKING CHANGE: existing sessions are invalidated. Users must
 re-authenticate via magic link after this deploy.
 ```
+
+---
+
+## Code Quality Tools
+
+Static analysis runs automatically via agent hooks and manually via `mix check`.
+
+| Tool | Purpose | Hook timing |
+|---|---|---|
+| `mix format` | Code formatting + Tailwind class sorting (via `tailwind_formatter`) | Stop + per-file |
+| `credo --strict` | Code quality, consistency, readability | Stop + per-file |
+| `sobelow` | Security (SQL injection, XSS, command injection) | Stop only |
+| `dialyxir` | Type checking via Dialyzer | CI only (too slow for hooks) |
+| `ex_check` | Runs all tools in parallel with `mix check` | CI and manual |
+
+**Hook architecture:** shared scripts in `.quality/scripts/`, wired per-agent in
+`.cursor/hooks.json`, `.claude/settings.json`, and `.codex/hooks.json`. The parity
+principle applies: any hook change must update all three configs. See
+`AGENTS.md` § "Hooks (quality gates)" for the full mapping.
+
+**Config files:** `.credo.exs` (Credo rules), `.check.exs` (ex_check tools),
+`.formatter.exs` (format plugins including `TailwindFormatter`). These activate
+when the umbrella app is scaffolded.
 
 ---
 

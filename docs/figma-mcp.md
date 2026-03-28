@@ -9,6 +9,18 @@
 
 ---
 
+## Quick start (for agents)
+
+| Direction | Load these | Prereq |
+|---|---|---|
+| **Figma → Code** | This doc + skill `figma-to-liveview` | Frame registered in `product/figma.md` |
+| **Code → Figma** | This doc + skill `figma-orchestration` | Load **figma-use** skill before every `use_figma` call |
+| **Verify parity** | `get_screenshot` after changes | — |
+
+All production files must be in `product/figma.md`. If not listed, register first.
+
+---
+
 ## Canonical file registry
 
 All production Figma files **must** be listed in `product/figma.md` with `file_key`, URL,
@@ -27,7 +39,7 @@ registered.
 | **get_metadata** | Large file; need structure only before targeted reads. | Sparse XML; then call `get_design_context` on chosen ids. |
 | **get_screenshot** | Verify layout, contrast, cropping after changes. | Use after substantive `use_figma` writes. |
 | **get_variable_defs** | List tokens used in selection. | Align names with `docs/design-system.md`. |
-| **use_figma** | **Create, edit, delete** nodes, variables, components. | **Mandatory:** load **figma-use** skill before every call; pass `description` + `skillNames`. |
+| **use_figma** | **Create, edit, delete** nodes, variables, components. | **STOP: Load the `figma-use` skill before calling this tool. Every time.** Pass `description` + `skillNames`. |
 | **search_design_system** | Reuse library components before drawing new ones. | Prefer import over redraw. |
 | **create_design_system_rules** | Generate agent rule file from codebase. | Save only if reviewed; avoid duplicate of `docs/design-system.md`. |
 

@@ -4,147 +4,17 @@ globs: ["**/live/**", "**/components/**", "**/css/**", "**/js/**", "assets/**", 
 alwaysApply: false
 ---
 
-# Frontend Design Skill
+# Frontend Design — Cursor Auto-Trigger Rule
 
-Use this skill when the quality of the work depends on art direction, hierarchy,
-restraint, imagery, and motion rather than component count.
+This rule auto-loads when Cursor opens files matching the globs above.
+The full skill content lives in `.agents/skills/frontend-design/SKILL.md` —
+read and follow it. That file is the single source of truth for all agents
+(Cursor, Claude Code, Codex).
 
-Goal: ship interfaces that feel deliberate, premium, and current. Default toward
-award-level composition: one big idea, strong imagery, sparse copy, rigorous
-spacing, and a small number of memorable motions.
+Also read:
 
-## This Project's Stack
-
-This is a Phoenix LiveView application. All frontend guidance must respect:
-
-- **Phoenix LiveView** for all page state, data flow, and server-driven UI.
-- **HEEx templates** with function components (`attr`, `slot`, `~H` sigil).
-- **Tailwind CSS** with design tokens defined in `tailwind.config.js` and CSS custom properties.
-- **LiveView.JS** (`Phoenix.LiveView.JS`) for client micro-interactions (show/hide, transitions, class toggles).
-- **Colocated hooks** (LiveView 1.1) for third-party JS libraries (charts, terminals, maps).
-- **No React, no Framer Motion.** Motion is CSS transitions + LiveView.JS + occasional hook-based animation.
-- Component layers: `ui/` (primitives) → `domain/` (composed) → `interactive/` (stateful with hooks).
-- All colors, spacing, and typography use token classes from `tailwind.config.js`. No raw values.
-
-See `docs/frontend.md`, `docs/design-system.md`, `docs/workflow.md`, `docs/figma-mcp.md`, and `docs/agentic-design.md`.
-
-## Working Model
-
-Before building a page or significant UI, write three things:
-
-- **Visual thesis:** one sentence describing mood, material, and energy.
-- **Content plan:** what each section of the page does (hero, support, detail, action).
-- **Interaction thesis:** 2–3 motion ideas that change the feel of the page.
-
-Each section gets one job, one dominant visual idea, and one primary takeaway or action.
-
-## Beautiful Defaults
-
-- Start with composition, not components.
-- Prefer a full-bleed hero or full-canvas visual anchor on marketing surfaces.
-- Make the brand or product name the loudest text.
-- Keep copy short enough to scan in seconds.
-- Use whitespace, alignment, scale, cropping, and contrast before adding chrome.
-- Limit the system: two typefaces max, one accent color by default.
-- Default to cardless layouts. Use sections, columns, dividers, lists, and media blocks instead.
-- Treat the first viewport as a poster, not a document.
-
-## App UI — The Primary Mode
-
-This is a cloud infrastructure platform. Most pages are operational dashboards,
-not marketing pages. Default to Linear-style restraint:
-
-- Calm surface hierarchy.
-- Strong typography and spacing.
-- Few colors — lean on `foreground`, `muted-foreground`, and one `primary` accent.
-- Dense but readable information.
-- Minimal chrome.
-- Cards only when the card IS the interaction (e.g., a cluster card you click into).
-
-Organize app surfaces around:
-
-- Primary workspace (the main content area).
-- Navigation (sidebar or top nav).
-- Secondary context or inspector (detail panels, slide-overs).
-- One clear accent for action or state.
-
-Avoid:
-
-- Dashboard-card mosaics.
-- Thick borders on every region.
-- Decorative gradients behind routine product UI.
-- Multiple competing accent colors.
-- Ornamental icons that do not improve scanning.
-
-If a panel can become plain layout without losing meaning, remove the card treatment.
-
-## Utility Copy For Product UI
-
-When building dashboards, admin tools, or operational workspaces:
-
-- Prioritize orientation, status, and action over promise, mood, or brand voice.
-- Start with the working surface: KPIs, charts, filters, tables, status, or task context.
-- Section headings say what the area IS or what the user can DO there.
-- Good: "Clusters", "Recent Deployments", "Resource Usage", "Team Members".
-- Bad: "Your Infrastructure Journey", "Unleash Your Cloud Potential".
-- Supporting text explains scope, behavior, freshness, or decision value in one sentence.
-- If a sentence could appear in a homepage hero or ad, rewrite it for product UI.
-- If a section does not help someone operate, monitor, or decide, remove it.
-
-## Landing Pages
-
-When building marketing or landing pages (not the app itself):
-
-1. **Hero:** brand, promise, CTA, and one dominant visual.
-2. **Support:** one concrete feature, offer, or proof point.
-3. **Detail:** atmosphere, workflow, product depth, or story.
-4. **Final CTA:** convert, start, visit, or contact.
-
-Hero rules:
-
-- One composition only. Full-bleed image or dominant visual plane.
-- Brand first, headline second, body third, CTA fourth.
-- No hero cards, stat strips, logo clouds, pill clusters, or floating dashboards.
-- All text over imagery must maintain strong contrast and clear tap targets.
-
-## Motion — LiveView.JS + CSS
-
-Use motion to create presence and hierarchy, not noise.
-
-Ship at least 2–3 intentional motions for visually-led work:
-
-- One entrance sequence (CSS `@keyframes` or LiveView.JS transition on mount).
-- One scroll-linked or depth effect (hook-based if complex).
-- One hover or reveal transition that sharpens affordance.
-
-Implementation for this stack:
-
-- **Simple transitions:** `Phoenix.LiveView.JS` with `JS.show/hide` transition tuples.
-- **CSS transitions:** Tailwind `transition-*`, `duration-*`, `ease-*` classes.
-- **Entrance animations:** CSS `@keyframes` with Tailwind `animate-*` classes.
-- **Complex motion:** Colocated hook with GSAP or lightweight animation library.
-- **Scroll effects:** `IntersectionObserver` in a hook.
-- Always use `motion-safe:` Tailwind variant to respect `prefers-reduced-motion`.
-
-Motion rules: noticeable, smooth on mobile, fast (200–400ms), consistent, removed if ornamental.
-
-## Hard Rules
-
-- No cards by default. Cards only when they represent an interactive entity.
-- No more than one dominant idea per section.
-- No filler copy.
-- No more than two typefaces without a clear reason.
-- No more than one accent color unless the design system requires it.
-- No raw color values — every color from the design token system.
-- No custom CSS — Tailwind utilities only.
-- Every page must work on desktop and mobile.
-
-## Litmus Checks
-
-- Is the brand or product unmistakable in the first screen?
-- Is there one strong visual anchor?
-- Can the page be understood by scanning headlines only?
-- Does each section have one job?
-- Are cards actually necessary?
-- Does motion improve hierarchy or atmosphere?
-- Does every color come from a token? Every spacing from the Tailwind scale?
+- `docs/frontend.md` — component architecture, LiveView patterns.
+- `docs/design-system.md` — token foundations, two-tier colors.
+- `docs/workflow.md` — design-to-code process.
+- `docs/figma-mcp.md` — Figma MCP tool matrix.
+- `docs/agentic-design.md` — the loop and anti-stale matrix.
