@@ -2,6 +2,16 @@
 !/external-references/AGENTS.md
 !/external-references/CLAUDE.md
 
+# Claude Code per-machine memory (path-derived folder names, not portable).
+.claude/projects/
+.claude/settings.local.json
+
+# Elixir / BEAM artifacts.
+erl_crash.dump
+/_build/
+/deps/
+*.beam
+
 # macOS metadata.
 .DS_Store
 ._*

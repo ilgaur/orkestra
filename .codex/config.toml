@@ -5,6 +5,11 @@
 # Docs: https://developers.openai.com/codex/mcp
 # Figma setup: https://developers.figma.com/docs/figma-mcp-server/remote-server-installation/
 
+# Quality hooks — run Credo, format, and Sobelow checks during agent loop.
+# Requires .codex/hooks.json (committed alongside this file).
+[features]
+codex_hooks = true
+
 [mcp_servers.chrome-devtools]
 command = "npx"
 args = [
